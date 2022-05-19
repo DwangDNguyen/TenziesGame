@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --clr-bgr: #f5f5f5;
+  --clr-font: #000;
+  --clr-frames: #0b2434;
+}
+.dark-mode {
+  --clr-bgr: #000;
+  --clr-font: #f5f5f5;
+  --clr-frames: #a7becd;
+}
+
+body {
+  margin: 0;
+  background-color: var(--clr-frames);
+  padding: 50px;
+}
+main {
+  background-color: var(--clr-bgr);
+  height: 400px;
+  min-width: 800px;
+  border-radius: 5px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: all 0.5s;
+}
+
+.title {
+  font-size: 60px;
+  margin: 0;
+  font-weight: 600;
+  color: var(--clr-font);
+}
+.instructions {
+  font-size: 20px;
+  color: var(--clr-font);
+}
+.dice-container {
+  display: grid;
+  grid-template: auto auto / repeat(5, 1fr);
+  gap: 30px;
+}
+.dice-face {
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.die-num {
+  font-size: 2rem;
+  font-weight: 600;
+}
+button {
+  padding: 10px 30px;
+  background-color: rgb(81, 92, 255);
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 30px;
+  border: none;
+  font-size: 18px;
+}
+button:focus {
+  outline: none;
+}
+button:active {
+  box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+}
+
+.result {
+  color: red;
+  font-weight: 600px;
+}
+
+.toggler--slider {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 30px;
+  color: var(--clr-font);
+}

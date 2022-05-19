@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tenzies Game</title>
+    <script
+      src="https://kit.fontawesome.com/e9fd377d69.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function Die(props) {
+        const styles = {
+          backgroundColor: props.isHeld ? "#59E391" : "white",
+        };
+
+        return (
+          <div className="dice-face" style={styles} onClick={props.holdDice}>
+            <h2 className="die-num">{props.value}</h2>
+          </div>
+        );
+      }
+
+      function App() {
+        const [dice, setDice] = React.useState(allNewDice());
+        const [tenzies, setTenzies] = React.useState(false);
+        const [darkMode, setDarkMode] = React.useState(false);
+
+        function generateNewDie() {
+          return {
+            value: Math.ceil(Math.random() * 100),
+            isHeld: false,
+            id: Math.random() * 10,
+          };
+        }
+
+        function allNewDice() {
+          const newDice = [];
+          for (let i = 0; i < 10; i++) {
+            newDice.push(generateNewDie());
+          }
+          return newDice;
+        }
+
+        function rollDice() {
+          if (!tenzies) {
+            setDice((prevDice) =>
+              prevDice.map((die) => {
+                return die.isHeld ? die : generateNewDie();
+              })
+            );
+          } else {
+            setTenzies(false);
+            setDice(allNewDice());
+          }
+        }
+
+        function holdDice(id) {
+          setDice((prevDice) =>
+            prevDice.map((die) => {
+              return die.id === id ? { ...die, isHeld: !die.isHeld } : die;
+            })
+          );
+        }
+
+        React.useEffect(() => {
+          const allHeld = dice.every((die) => die.isHeld);
+          const firstValue = dice[0].value;
+          const allSameValue = dice.every((die) => die.value === firstValue);
+          if (allHeld && allSameValue) {
+            setTenzies(true);
+          }
+        }, [dice]);
+
+        const diceElements = dice.map((die, index) => (
+          <Die
+            key={index}
+            value={die.value}
+            isHeld={die.isHeld}
+            holdDice={() => holdDice(die.id)}
+          />
+        ));
+
+        function toggleDarkMode(e) {
+          e.preventDefault();
+          const btn = document.querySelector(".toggler--slider");
+          const btnDark = document.querySelector(".btn");
+          setDarkMode((prevMode) => {
+            btnDark.classList.toggle("fa-toggle-on");
+
+            return !prevMode;
+          });
+        }
+
+        return (
+          <main className={darkMode ? "dark-mode" : ""}>
+            <div className="toggler--slider" onClick={toggleDarkMode}>
+              <i className="fa-solid fa-toggle-off btn"></i>
+            </div>
+            <h1 className="title">Tenzies</h1>
+            <p className="instructions">
+              Roll until all dice are the same. Click each die to freeze it at
+              its current value between rolls.
+            </p>
+            <div className="dice-container">{diceElements}</div>
+            <button className="button" onClick={rollDice}>
+              {tenzies ? "New Game" : "Roll"}
+            </button>
+            <h1 className="result">{tenzies ? "You win!!!" : ""}</h1>
+          </main>
+        );
+      }
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
